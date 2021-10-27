@@ -189,7 +189,14 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
                 leading: SvgPicture.asset(
                   "assets/icons/contact.svg",
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _selectedIndex = 1;
+                    _isTitle = false;
+                    _appBarTitle = "Contact List";
+                  });
+                },
               ),
               ListTile(
                 title: Text(
@@ -202,7 +209,12 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
                   "assets/icons/history.svg",
                 ),
                 onTap: () {
-                  print('HISTORY');
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _selectedIndex = 2;
+                    _isTitle = false;
+                    _appBarTitle = "History";
+                  });
                 },
               ),
               ListTile(
