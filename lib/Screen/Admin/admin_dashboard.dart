@@ -16,6 +16,8 @@ import 'package:navigo/components/Constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminDashboard extends StatefulWidget {
+  const AdminDashboard({Key key}) : super(key: key);
+
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
 }
@@ -25,13 +27,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
   String _userName = "Username";
   String _email = "abc@gmail.com";
   String _name = 's';
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusSearchBar = Text("Task List");
+  Icon cusIcon = const Icon(Icons.search);
+  Widget cusSearchBar = const Text("Task List");
   int _selectedIndex = 0;
   bool _isTitle = false;
   bool _isFAB = true;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery = new TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchQuery = TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _getUserInfo();
   }
 
-  List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = <Widget>[
     TaskListScreen(),
     EmployeeListScreen(),
     ContactListScreen(),
@@ -76,32 +78,31 @@ class _AdminDashboardState extends State<AdminDashboard> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => _scaffoldKey.currentState.openDrawer(),
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
         ),
         actions: [
           IconButton(
             onPressed: () {
               setState(() {
                 _isTitle = true;
-                if (this.cusIcon.icon == Icons.search) {
-                  this.cusIcon = Icon(Icons.cancel);
-                  this.cusSearchBar = TextField(
+                if (cusIcon.icon == Icons.search) {
+                  cusIcon = const Icon(Icons.cancel);
+                  cusSearchBar = TextField(
                     controller: _searchQuery,
                     onChanged: (value) {
                       _name = value;
-                      print('Search: ' + _name);
                       // TaskListScreen(name: value,);
                     },
                     textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Search...",
                         hintStyle: TextStyle(color: textColor)),
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    style: const TextStyle(color: Colors.white, fontSize: 16.0),
                   );
                 } else {
-                  this.cusIcon = Icon(Icons.search);
-                  this.cusSearchBar = Text(_appBarTitle);
+                  cusIcon = const Icon(Icons.search);
+                  cusSearchBar = Text(_appBarTitle);
                 }
               });
             },
@@ -147,46 +148,46 @@ class _AdminDashboardState extends State<AdminDashboard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: _isFAB
           ? FloatingActionButton(
-              backgroundColor: kSecondaryLightColor,
-              foregroundColor: Colors.black,
-              child: const ImageIcon(
-                AssetImage("assets/icons/add.png"),
-              ),
-              onPressed: () {
-                switch (_selectedIndex) {
-                  case 0:
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => CreateTaskScreen(),
-                        ));
-                    break;
-                  case 1:
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => AddEmployeeScreen(),
-                        ));
-                    break;
-                  case 2:
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => AddContactScreen(),
-                        ));
-                    break;
-                  case 3:
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => HistoryDetailsScreen(),
-                        ));
-                    break;
-                }
-              },
-            )
+        backgroundColor: kSecondaryLightColor,
+        foregroundColor: Colors.black,
+        child: const ImageIcon(
+          AssetImage("assets/icons/add.png"),
+        ),
+        onPressed: () {
+          switch (_selectedIndex) {
+            case 0:
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => CreateTaskScreen(),
+                  ));
+              break;
+            case 1:
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => AddEmployeeScreen(),
+                  ));
+              break;
+            case 2:
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => AddContactScreen(),
+                  ));
+              break;
+            case 3:
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => HistoryDetailsScreen(),
+                  ));
+              break;
+          }
+        },
+      )
           : null,
-      bottomSheet: Padding(padding: EdgeInsets.only(bottom: 45.0)),
+      bottomSheet: const Padding(padding: EdgeInsets.only(bottom: 45.0)),
     );
   }
 
@@ -209,13 +210,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Drawer(
         child: Container(
             color: Colors.black,
-            child: ListView(padding: EdgeInsets.all(0.0), children: <Widget>[
+            child: ListView(padding: const EdgeInsets.all(0.0), children: <Widget>[
               UserAccountsDrawerHeader(
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(
                     _userName.substring(0, 1).toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: kSecondaryLightColor,
                         fontSize: 35.0,
                         fontWeight: FontWeight.bold),
@@ -223,7 +224,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 accountName: Text(
                   _userName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
@@ -232,18 +233,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 accountEmail: Text(
                   _email,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.black,
                   ),
                 ),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/images/header_bg.png"),
                         fit: BoxFit.cover)),
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'EMPLOYEE',
                   style: TextStyle(
                     color: Colors.white,
@@ -252,10 +253,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 leading: SvgPicture.asset(
                   "assets/icons/employee.svg",
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _selectedIndex = 1;
+                    _isTitle = false;
+                    _isFAB = true;
+                    _appBarTitle = "Employee List";
+                  });
+                },
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'CONTACTS',
                   style: TextStyle(
                     color: Colors.white,
@@ -264,10 +273,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 leading: SvgPicture.asset(
                   "assets/icons/contact.svg",
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _selectedIndex = 2;
+                    _isTitle = false;
+                    _isFAB = true;
+                    _appBarTitle = "Contact List";
+                  });
+                },
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'HISTORY',
                   style: TextStyle(
                     color: Colors.white,
@@ -277,11 +294,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   "assets/icons/history.svg",
                 ),
                 onTap: () {
-                  print('HISTORY');
+                  setState(() {
+                    Navigator.of(context).pop();
+                    _selectedIndex = 3;
+                    _isTitle = false;
+                    _isFAB = false;
+                    _appBarTitle = "History";
+                  });
                 },
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'SETTING',
                   style: TextStyle(
                     color: Colors.white,
@@ -290,10 +313,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 leading: SvgPicture.asset(
                   "assets/icons/setting.svg",
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'LOGOUT',
                   style: TextStyle(
                     color: Colors.white,
@@ -306,44 +331,44 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
-                            backgroundColor: textFieldBackgroundColor,
-                            title: Text(
-                              'Are you sure want to log out?',
+                        backgroundColor: textFieldBackgroundColor,
+                        title: const Text(
+                          'Are you sure want to log out?',
+                          style: TextStyle(
+                              fontSize: 16.0, color: textColor),
+                        ),
+                        actions: [
+                          FlatButton(
+                            child: const Text(
+                              'CANCEL',
                               style: TextStyle(
-                                  fontSize: 16.0, color: textColor),
+                                  fontSize: 14.0, color: textColor),
                             ),
-                            actions: [
-                              FlatButton(
-                                child: Text(
-                                  'CANCEL',
-                                  style: TextStyle(
-                                      fontSize: 14.0, color: textColor),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text(
-                                  'LOG OUT',
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: kSecondaryLightColor),
-                                ),
-                                onPressed: () async {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove('role');
-                                  prefs.remove('username');
-                                  prefs.remove('email');
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context)
-                                      .pushReplacementNamed(loginScreen);
-                                },
-                              ),
-                            ],
-                          ));
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: const Text(
+                              'LOG OUT',
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: kSecondaryLightColor),
+                            ),
+                            onPressed: () async {
+                              final prefs =
+                              await SharedPreferences.getInstance();
+                              prefs.remove('role');
+                              prefs.remove('username');
+                              prefs.remove('email');
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .pushReplacementNamed(loginScreen);
+                            },
+                          ),
+                        ],
+                      ));
                 },
               ),
             ])));
