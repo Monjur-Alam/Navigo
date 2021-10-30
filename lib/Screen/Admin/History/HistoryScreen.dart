@@ -6,20 +6,24 @@ import 'package:navigo/Screen/Admin/History/HistoryDetailsScreen.dart';
 import 'package:navigo/components/Constant.dart';
 
 class HistoryScreen extends StatefulWidget {
+  final String name;
+  HistoryScreen({Key key, this.name}) : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  Stream<QuerySnapshot> _historyStream = FirebaseFirestore.instance.collection('history').snapshots();
 
-
+  CollectionReference _history = FirebaseFirestore.instance.collection('history');
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _historyStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? _history.where("send_from_name", isNotEqualTo:widget.name).orderBy("send_from_name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :_history.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

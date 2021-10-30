@@ -5,18 +5,17 @@ import 'package:navigo/Screen/Admin/Contact/EditContactScreen.dart';
 import 'package:navigo/components/Constant.dart';
 
 class ContactListScreen extends StatefulWidget {
+  final String name;
+  ContactListScreen({Key key, this.name}) : super(key: key);
 
   @override
   _ContactListScreenState createState() => _ContactListScreenState();
 }
 
 class _ContactListScreenState extends State<ContactListScreen> {
-  final Stream<QuerySnapshot> contactStream =
-  FirebaseFirestore.instance.collection('contact').snapshots();
 
   // For deleting contact
-  CollectionReference contact =
-  FirebaseFirestore.instance.collection('contact');
+  CollectionReference contact = FirebaseFirestore.instance.collection('contact');
 
   Future<void> _deleteContact(id) {
     return contact
@@ -29,7 +28,10 @@ class _ContactListScreenState extends State<ContactListScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: contactStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? contact.where("name", isNotEqualTo:widget.name).orderBy("name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :contact.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

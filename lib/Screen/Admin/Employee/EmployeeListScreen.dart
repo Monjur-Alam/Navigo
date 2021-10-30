@@ -6,17 +6,17 @@ import 'package:navigo/Screen/Admin/Employee/EmployeeDetailsScreen.dart';
 import 'package:navigo/components/Constant.dart';
 
 class EmployeeListScreen extends StatefulWidget {
+  final String name;
+  EmployeeListScreen({Key key, this.name}) : super(key: key);
+
   @override
   _EmployeeListScreenState createState() => _EmployeeListScreenState();
 }
 
 class _EmployeeListScreenState extends State<EmployeeListScreen> {
-  final Stream<QuerySnapshot> employeeStream =
-      FirebaseFirestore.instance.collection('employee').snapshots();
 
   // For deleting employee
-  CollectionReference employee =
-      FirebaseFirestore.instance.collection('employee');
+  CollectionReference employee = FirebaseFirestore.instance.collection('employee');
 
   Future<void> _deleteEmployee(id) {
     return employee
@@ -29,7 +29,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: employeeStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? employee.where("name", isNotEqualTo:widget.name).orderBy("name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :employee.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

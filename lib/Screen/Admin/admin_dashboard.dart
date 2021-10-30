@@ -12,7 +12,9 @@ import 'package:navigo/Screen/Admin/Task/CreateTaskScreen.dart';
 import 'package:navigo/Screen/Admin/Employee/EmployeeListScreen.dart';
 import 'package:navigo/Screen/Admin/History/HistoryDetailsScreen.dart';
 import 'package:navigo/Screen/Admin/Task/TaskListScreen.dart';
+import 'package:navigo/Screen/Admin/Task/Test.dart';
 import 'package:navigo/components/Constant.dart';
+import 'package:navigo/helper/keyboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -25,15 +27,16 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   String _appBarTitle = "Task List";
   String _userName = "Username";
-  String _email = "abc@gmail.com";
-  String _name = 's';
+  String _email = "abc@example.com";
+  String _name = '';
   Icon cusIcon = const Icon(Icons.search);
   Widget cusSearchBar = const Text("Task List");
   int _selectedIndex = 0;
+  int _oldSelectedIndex = 0;
   bool _isTitle = false;
   bool _isFAB = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery = TextEditingController();
+  TextEditingController _searchQuery = TextEditingController();
 
   @override
   void initState() {
@@ -41,32 +44,31 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _getUserInfo();
   }
 
-  final List<Widget> _widgetOptions = <Widget>[
-    TaskListScreen(),
-    EmployeeListScreen(),
-    ContactListScreen(),
-    HistoryScreen(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _searchQuery = null;
+      cusIcon = const Icon(Icons.search);
       if (index == 0) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Task List";
+        _name = '';
       } else if (index == 1) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Employee List";
+        _name = '';
       } else if (index == 2) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Contact List";
+        _name = '';
       } else if (index == 3) {
         _isTitle = false;
         _isFAB = false;
         _appBarTitle = "History";
+        _name = '';
       }
     });
   }
@@ -88,10 +90,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 if (cusIcon.icon == Icons.search) {
                   cusIcon = const Icon(Icons.cancel);
                   cusSearchBar = TextField(
+                    autofocus: true,
                     controller: _searchQuery,
                     onChanged: (value) {
                       _name = value;
-                      // TaskListScreen(name: value,);
+                      setState(() {
+                        buildPages();
+                      });
                     },
                     textInputAction: TextInputAction.search,
                     decoration: const InputDecoration(
@@ -101,6 +106,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     style: const TextStyle(color: Colors.white, fontSize: 16.0),
                   );
                 } else {
+                  KeyboardUtil.hideKeyboard(context);
+                  _name = '';
+                  setState(() {
+                    buildPages();
+                  });
+                  _searchQuery = null;
                   cusIcon = const Icon(Icons.search);
                   cusSearchBar = Text(_appBarTitle);
                 }
@@ -114,9 +125,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         backgroundColor: Colors.black,
       ),
       backgroundColor: bgColor,
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: buildPages(),
       drawer: _drawerMenu(),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -148,44 +157,44 @@ class _AdminDashboardState extends State<AdminDashboard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: _isFAB
           ? FloatingActionButton(
-        backgroundColor: kSecondaryLightColor,
-        foregroundColor: Colors.black,
-        child: const ImageIcon(
-          AssetImage("assets/icons/add.png"),
-        ),
-        onPressed: () {
-          switch (_selectedIndex) {
-            case 0:
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => CreateTaskScreen(),
-                  ));
-              break;
-            case 1:
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => AddEmployeeScreen(),
-                  ));
-              break;
-            case 2:
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => AddContactScreen(),
-                  ));
-              break;
-            case 3:
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => HistoryDetailsScreen(),
-                  ));
-              break;
-          }
-        },
-      )
+              backgroundColor: kSecondaryLightColor,
+              foregroundColor: Colors.black,
+              child: const ImageIcon(
+                AssetImage("assets/icons/add.png"),
+              ),
+              onPressed: () {
+                switch (_selectedIndex) {
+                  case 0:
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => CreateTaskScreen(),
+                        ));
+                    break;
+                  case 1:
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => AddEmployeeScreen(),
+                        ));
+                    break;
+                  case 2:
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => AddContactScreen(),
+                        ));
+                    break;
+                  case 3:
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => HistoryDetailsScreen(),
+                        ));
+                    break;
+                }
+              },
+            )
           : null,
       bottomSheet: const Padding(padding: EdgeInsets.only(bottom: 45.0)),
     );
@@ -206,11 +215,27 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
   }
 
+  Widget buildPages() {
+    switch (_selectedIndex) {
+      case 0:
+        return TaskListScreen(name: _name);
+      case 1:
+        return EmployeeListScreen(name: _name);
+      case 2:
+        return ContactListScreen(name: _name);
+      case 3:
+        return HistoryScreen(name: _name);
+      default:
+        return Container();
+    }
+  }
+
   Widget _drawerMenu() {
     return Drawer(
         child: Container(
             color: Colors.black,
-            child: ListView(padding: const EdgeInsets.all(0.0), children: <Widget>[
+            child:
+                ListView(padding: const EdgeInsets.all(0.0), children: <Widget>[
               UserAccountsDrawerHeader(
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
@@ -331,44 +356,44 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
-                        backgroundColor: textFieldBackgroundColor,
-                        title: const Text(
-                          'Are you sure want to log out?',
-                          style: TextStyle(
-                              fontSize: 16.0, color: textColor),
-                        ),
-                        actions: [
-                          FlatButton(
-                            child: const Text(
-                              'CANCEL',
-                              style: TextStyle(
-                                  fontSize: 14.0, color: textColor),
+                            backgroundColor: textFieldBackgroundColor,
+                            title: const Text(
+                              'Are you sure want to log out?',
+                              style:
+                                  TextStyle(fontSize: 16.0, color: textColor),
                             ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
-                            child: const Text(
-                              'LOG OUT',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: kSecondaryLightColor),
-                            ),
-                            onPressed: () async {
-                              final prefs =
-                              await SharedPreferences.getInstance();
-                              prefs.remove('role');
-                              prefs.remove('username');
-                              prefs.remove('email');
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushReplacementNamed(loginScreen);
-                            },
-                          ),
-                        ],
-                      ));
+                            actions: [
+                              FlatButton(
+                                child: const Text(
+                                  'CANCEL',
+                                  style: TextStyle(
+                                      fontSize: 14.0, color: textColor),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: const Text(
+                                  'LOG OUT',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: kSecondaryLightColor),
+                                ),
+                                onPressed: () async {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.remove('role');
+                                  prefs.remove('username');
+                                  prefs.remove('email');
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(loginScreen);
+                                },
+                              ),
+                            ],
+                          ));
                 },
               ),
             ])));

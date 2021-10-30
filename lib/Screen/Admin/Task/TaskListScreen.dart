@@ -7,18 +7,14 @@ import 'package:navigo/components/Constant.dart';
 import 'EditTaskScreen.dart';
 
 class TaskListScreen extends StatefulWidget {
-  // final String name;
-  // TaskListScreen({Key key, this.name}) : super(key: key);
+  final String name;
+  TaskListScreen({Key key, this.name}) : super(key: key);
 
   @override
   _TaskListScreenState createState() => _TaskListScreenState();
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-    final Stream<QuerySnapshot> taskStream =
-      FirebaseFirestore.instance.collection('task').snapshots();
-  String _taskTitle;
-  String searchtxt = 'Shipping';
 
   // For deleting employee
   CollectionReference task = FirebaseFirestore.instance.collection('task');
@@ -34,8 +30,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: ( searchtxt!= "" && searchtxt!= null)?task.where("name",isNotEqualTo:searchtxt).orderBy("name").startAt([searchtxt,])
-            .endAt([searchtxt+'\uf8ff',])
+        stream: ( widget.name!= "" && widget.name!= null) ? task.where("name", isNotEqualTo:widget.name).orderBy("name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
             .snapshots()
             :task.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -43,7 +39,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
             print('Something went Wrong');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // print('aaa ' + widget.name);
             return Center(
               child: CircularProgressIndicator(),
             );
