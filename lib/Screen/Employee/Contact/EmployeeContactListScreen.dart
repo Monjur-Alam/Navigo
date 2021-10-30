@@ -4,19 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:navigo/components/Constant.dart';
 
 class EmployeeContactListScreen extends StatefulWidget {
+  final String name;
+  EmployeeContactListScreen({Key key, this.name}) : super(key: key);
 
   @override
   _EmployeeContactListScreenState createState() => _EmployeeContactListScreenState();
 }
 
 class _EmployeeContactListScreenState extends State<EmployeeContactListScreen> {
-  final Stream<QuerySnapshot> contactStream =
-  FirebaseFirestore.instance.collection('contact').snapshots();
+
+  CollectionReference contact = FirebaseFirestore.instance.collection('contact');
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: contactStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? contact.where("name", isNotEqualTo:widget.name).orderBy("name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :contact.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

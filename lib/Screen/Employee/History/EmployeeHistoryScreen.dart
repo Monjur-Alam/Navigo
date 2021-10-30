@@ -7,13 +7,16 @@ import 'package:navigo/Screen/Employee/History/EmployeeHistoryDetailsScreen.dart
 import 'package:navigo/components/Constant.dart';
 
 class EmployeeHistoryScreen extends StatefulWidget {
+  final String name;
+  EmployeeHistoryScreen({Key key, this.name}) : super(key: key);
+
   @override
   _EmployeeHistoryScreenState createState() => _EmployeeHistoryScreenState();
 }
 
 class _EmployeeHistoryScreenState extends State<EmployeeHistoryScreen> {
-  Stream<QuerySnapshot> _employeeHistoryStream;
   String _uid;
+  CollectionReference _history;
 
   @override
   void initState() {
@@ -25,14 +28,16 @@ class _EmployeeHistoryScreenState extends State<EmployeeHistoryScreen> {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     User user = _firebaseAuth.currentUser;
     _uid = user.uid.toString();
-    _employeeHistoryStream =
-        FirebaseFirestore.instance.collection(_uid).snapshots();
+    _history = FirebaseFirestore.instance.collection(_uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _employeeHistoryStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? _history.where("send_from_name", isNotEqualTo:widget.name).orderBy("send_from_name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :_history.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

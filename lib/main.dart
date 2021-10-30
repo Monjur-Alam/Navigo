@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:navigo/Screen/Admin/admin_dashboard.dart';
-import 'package:navigo/Screen/Admin/AdminDeshboardScreen.dart';
 import 'package:navigo/Screen/AnimatedSplashScreen.dart';
 import 'package:navigo/Screen/Employee/EmployeeDashboardScreen.dart';
 import 'package:navigo/Screen/Login/LoginScreen.dart';

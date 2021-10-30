@@ -12,7 +12,6 @@ import 'package:navigo/Screen/Admin/Task/CreateTaskScreen.dart';
 import 'package:navigo/Screen/Admin/Employee/EmployeeListScreen.dart';
 import 'package:navigo/Screen/Admin/History/HistoryDetailsScreen.dart';
 import 'package:navigo/Screen/Admin/Task/TaskListScreen.dart';
-import 'package:navigo/Screen/Admin/Task/Test.dart';
 import 'package:navigo/components/Constant.dart';
 import 'package:navigo/helper/keyboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,26 +48,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
       _selectedIndex = index;
       _searchQuery = null;
       cusIcon = const Icon(Icons.search);
+      _name = '';
       if (index == 0) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Task List";
-        _name = '';
       } else if (index == 1) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Employee List";
-        _name = '';
       } else if (index == 2) {
         _isTitle = false;
         _isFAB = true;
         _appBarTitle = "Contact List";
-        _name = '';
       } else if (index == 3) {
         _isTitle = false;
         _isFAB = false;
         _appBarTitle = "History";
-        _name = '';
       }
     });
   }
@@ -353,6 +349,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   "assets/icons/logout.svg",
                 ),
                 onTap: () {
+                  Navigator.of(context).pop();
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
@@ -386,7 +383,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   prefs.remove('role');
                                   prefs.remove('username');
                                   prefs.remove('email');
-                                  Navigator.of(context).pop();
                                   Navigator.of(context).pop();
                                   Navigator.of(context)
                                       .pushReplacementNamed(loginScreen);

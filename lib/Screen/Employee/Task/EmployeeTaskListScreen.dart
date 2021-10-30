@@ -5,18 +5,24 @@ import 'package:navigo/Screen/Employee/Task/SendEmailScreen.dart';
 import 'package:navigo/components/Constant.dart';
 
 class EmployeeTaskListScreen extends StatefulWidget {
+  final String name;
+  EmployeeTaskListScreen({Key key, this.name}) : super(key: key);
+
   @override
   _EmployeeTaskListScreenState createState() => _EmployeeTaskListScreenState();
 }
 
 class _EmployeeTaskListScreenState extends State<EmployeeTaskListScreen> {
-  final Stream<QuerySnapshot> taskStream =
-      FirebaseFirestore.instance.collection('task').snapshots();
+
+  CollectionReference task = FirebaseFirestore.instance.collection('task');
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: taskStream,
+        stream: ( widget.name!= "" && widget.name!= null) ? task.where("name", isNotEqualTo:widget.name).orderBy("name").startAt([widget.name])
+            .endAt([widget.name+'\uf8ff'])
+            .snapshots()
+            :task.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');

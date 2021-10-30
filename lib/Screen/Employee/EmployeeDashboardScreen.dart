@@ -7,6 +7,7 @@ import 'package:navigo/Screen/Employee/Contact/EmployeeContactListScreen.dart';
 import 'package:navigo/Screen/Employee/History/EmployeeHistoryScreen.dart';
 import 'package:navigo/Screen/Employee/Task/EmployeeTaskListScreen.dart';
 import 'package:navigo/components/Constant.dart';
+import 'package:navigo/helper/keyboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployeeDashboardScreen extends StatefulWidget {
@@ -23,6 +24,9 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
   Widget cusSearchBar = Text("Task List");
   int _selectedIndex = 0;
   bool _isTitle = false;
+  String _name = '';
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  TextEditingController _searchQuery = TextEditingController();
 
   @override
   void initState() {
@@ -30,15 +34,12 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
     _getUserInfo();
   }
 
-  List<Widget> _screenList = <Widget>[
-    EmployeeTaskListScreen(),
-    EmployeeContactListScreen(),
-    EmployeeHistoryScreen(),
-  ];
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   void _onItemTapped(int index) {
     setState(() {
+      _selectedIndex = index;
+      _searchQuery = null;
+      cusIcon = const Icon(Icons.search);
+      _name = '';
       _selectedIndex = index;
       if (index == 0) {
         _isTitle = false;
@@ -67,20 +68,33 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
             onPressed: () {
               setState(() {
                 _isTitle = true;
-                if (this.cusIcon.icon == Icons.search) {
-                  this.cusIcon = Icon(Icons.cancel);
-                  this.cusSearchBar = TextField(
+                if (cusIcon.icon == Icons.search) {
+                  cusIcon = const Icon(Icons.cancel);
+                  cusSearchBar = TextField(
+                    autofocus: true,
+                    controller: _searchQuery,
+                    onChanged: (value) {
+                      _name = value;
+                      setState(() {
+                        buildPages();
+                      });
+                    },
                     textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Search",
-                        hintStyle: TextStyle(color: textColor)
-                    ),
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        hintText: "Search...",
+                        hintStyle: TextStyle(color: textColor)),
+                    style: const TextStyle(color: Colors.white, fontSize: 16.0),
                   );
                 } else {
-                  this.cusIcon = Icon(Icons.search);
-                  this.cusSearchBar = Text(_appBarTitle);
+                  KeyboardUtil.hideKeyboard(context);
+                  _name = '';
+                  setState(() {
+                    buildPages();
+                  });
+                  _searchQuery = null;
+                  cusIcon = const Icon(Icons.search);
+                  cusSearchBar = Text(_appBarTitle);
                 }
               });
             },
@@ -93,7 +107,7 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
       ),
       backgroundColor: bgColor,
       body: Center(
-        child: _screenList.elementAt(_selectedIndex),
+        child: buildPages(),
       ),
       drawer: _drawerMenu(),
       bottomNavigationBar: BottomNavigationBar(
@@ -228,6 +242,7 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
                   "assets/icons/logout.svg",
                 ),
                 onTap: () {
+                  Navigator.of(context).pop();
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
@@ -260,7 +275,6 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
                               await SharedPreferences.getInstance();
                               prefs.remove('role');
                               Navigator.of(context).pop();
-                              Navigator.of(context).pop();
                               Navigator.of(context)
                                   .pushReplacementNamed(loginScreen);
                             },
@@ -270,5 +284,18 @@ class EmployeeDashboardScreenState extends State<EmployeeDashboardScreen> {
                 },
               ),
             ])));
+  }
+
+  Widget buildPages() {
+    switch (_selectedIndex) {
+      case 0:
+        return EmployeeTaskListScreen(name: _name);
+      case 1:
+        return EmployeeContactListScreen(name: _name);
+      case 2:
+        return EmployeeHistoryScreen(name: _name);
+      default:
+        return Container();
+    }
   }
 }

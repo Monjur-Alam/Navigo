@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:navigo/components/Constant.dart';
 
@@ -21,10 +20,10 @@ class _HistoryDetailsScreenState extends State<HistoryDetailsScreen> {
   String _signature;
 
   // For deleting history
-  CollectionReference contact = FirebaseFirestore.instance.collection('history');
+  CollectionReference _history = FirebaseFirestore.instance.collection('history');
 
   Future<void> _deleteHistory(id) {
-    return contact
+    return _history
         .doc(id)
         .delete()
         .then((value) => print('History deleted'))
