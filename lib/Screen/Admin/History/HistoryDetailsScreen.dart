@@ -119,7 +119,6 @@ class _HistoryDetailsScreenState extends State<HistoryDetailsScreen> {
             _subject = data['subject'];
             _text = data['text'];
             _signature = data['signature'];
-            print(_sendFromName);
             return CustomScrollView(
               reverse: true,
               slivers: [
@@ -182,7 +181,7 @@ class _HistoryDetailsScreenState extends State<HistoryDetailsScreen> {
               SizedBox(width: 15.0),
               Flexible(
                   child: Text(
-                    _sendFromName,
+                    _sendToName,
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   )),
             ],

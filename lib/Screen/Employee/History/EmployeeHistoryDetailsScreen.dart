@@ -177,7 +177,7 @@ class _EmployeeHistoryDetailsScreenState extends State<EmployeeHistoryDetailsScr
               SizedBox(width: 15.0),
               Flexible(
                   child: Text(
-                    _sendFromName,
+                    _sendToName,
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   )),
             ],
