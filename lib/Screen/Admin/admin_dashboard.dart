@@ -31,7 +31,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Icon cusIcon = const Icon(Icons.search);
   Widget cusSearchBar = const Text("Task List");
   int _selectedIndex = 0;
-  int _oldSelectedIndex = 0;
   bool _isTitle = false;
   bool _isFAB = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

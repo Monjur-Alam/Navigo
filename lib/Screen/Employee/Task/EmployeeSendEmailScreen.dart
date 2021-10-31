@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:navigo/Repository/EmailRepository.dart';
 import 'package:navigo/components/Constant.dart';
 import 'package:navigo/components/form_error_dark.dart';
 import 'package:navigo/helper/keyboard.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployeeSendEmailScreen extends StatefulWidget {
   final String id;

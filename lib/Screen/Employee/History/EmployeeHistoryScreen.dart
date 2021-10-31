@@ -83,14 +83,14 @@ class _EmployeeHistoryScreenState extends State<EmployeeHistoryScreen> {
                             ),
                             SizedBox(height: 30.0,),
                             Text(
-                              'Today',
+                              snapshot.data.docs[index]['date'],
                               style: TextStyle(
                                   color: historyTitleColor,
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '12:00',
+                              snapshot.data.docs[index]['time'],
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
@@ -130,7 +130,7 @@ class _EmployeeHistoryScreenState extends State<EmployeeHistoryScreen> {
                                     )),
                                 Container(
                                     child: Text(
-                                      snapshot.data.docs[index]['send_from_name'],
+                                      snapshot.data.docs[index]['send_to_name'],
                                       maxLines: 1,
                                       style: TextStyle(color: historyTextColor),
                                     )),
@@ -148,7 +148,7 @@ class _EmployeeHistoryScreenState extends State<EmployeeHistoryScreen> {
                                     )),
                                 Container(
                                     child: Text(
-                                      snapshot.data.docs[index]['send_from_name'],
+                                      snapshot.data.docs[index]['company'],
                                       maxLines: 1,
                                       style: TextStyle(color: historyTextColor),
                                     )),
