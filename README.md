@@ -1,4 +1,4 @@
-# navigo
+# navigoo
 
 A new Flutter project.
 
