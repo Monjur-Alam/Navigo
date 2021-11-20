@@ -1,6 +1,5 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 Future<bool> signIn(String email, String password) async {
   try {
@@ -22,6 +21,16 @@ Future<bool> signUp(String email, String password) async {
     } else if (e.code == 'email-already-in-use') {
       print('The account already use for that gmail');
     }
+    return false;
+  }
+}
+
+Future<bool> resetPassword(String email) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    return true;
+  } on FirebaseAuthException catch(e) {
+    print(e);
     return false;
   }
 }

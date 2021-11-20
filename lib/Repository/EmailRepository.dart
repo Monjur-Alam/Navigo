@@ -11,9 +11,9 @@ Future sendEmail({
   String message,
   String signature,
 }) async {
-  final serviceId = 'service_p7ttfeb';
-  final templateId = 'template_f06muzc';
-  final userId = 'user_6eJdSk843F0gUaNgpKkzw';
+  final serviceId = 'service_5r447ad';
+  final templateId = 'template_t5sc8vw';
+  final userId = 'user_YaAfiW2ojkNrUZpY6iAnt';
 
   final uri = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
   final response = await post(
@@ -28,7 +28,6 @@ Future sendEmail({
       'user_id': userId,
       'template_params': {
         'user_name': username,
-        'user_email': 'rajuraj987@yahoo.com',
         'to_email': email,
         'user_subject': subject,
         'user_message': message,

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:navigo/Repository/AuthRepository.dart';
 import 'package:navigo/Screen/Admin/Employee/EmployeeDetailsScreen.dart';
 import 'package:navigo/components/Constant.dart';
 
@@ -86,13 +88,13 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                             style: TextStyle(color: textColor, fontSize: 14.0),
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EmployeeDetailsScreen(
-                                    id: storedocs[index]['id']),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => EmployeeDetailsScreen(
+                            //         id: storedocs[index]['id']),
+                            //   ),
+                            // );
                           },
                         )
                       ]

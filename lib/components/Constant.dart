@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 String animatedSplash = "/AnimatedSplashScreen",
     loginScreen = "/LoginScreen",
     adminDashboard = "/AdminDashboard",
-    employeeDashboardScreen = "/EmployeeDashboardScreen";
+    employeeDashboardScreen = "/EmployeeDashboardScreen",
+    forgotPassword = "/ForgotPassword";
 
 // Form Error
 final RegExp emailValidatorRegExp =

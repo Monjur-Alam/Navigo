@@ -4,6 +4,7 @@ import 'package:navigo/Screen/Admin/admin_dashboard.dart';
 import 'package:navigo/Screen/AnimatedSplashScreen.dart';
 import 'package:navigo/Screen/Employee/EmployeeDashboardScreen.dart';
 import 'package:navigo/Screen/Login/LoginScreen.dart';
+import 'package:navigo/Screen/Login/forgot_password.dart';
 
 import 'components/Constant.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
             home: AnimatedSplashScreen(),
             routes: <String, WidgetBuilder>{
               loginScreen: (BuildContext context) => LoginScreen(),
+              forgotPassword: (BuildContext context) => ForgotPassword(),
               adminDashboard: (BuildContext context) => AdminDashboard(),
               employeeDashboardScreen: (BuildContext context) => EmployeeDashboardScreen()
             },

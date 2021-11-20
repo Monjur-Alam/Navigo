@@ -13,7 +13,7 @@ Future<bool> addEmployee(String _name, String _email, String _password, bool _is
   if ((await employeeRef.get()).exists) {
     return false;
   } else {
-    employeeRef.set({'name': _name, 'email': _email, 'password': _password, 'isAdmin': _isAdmin});
+    employeeRef.set({'name': _name, 'email': _email, 'password': _password, 'isAdmin': _isAdmin, 'uid': user.uid});
     return true;
   }
 }

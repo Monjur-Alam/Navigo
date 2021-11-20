@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:navigo/Repository/AuthRepository.dart';
 import 'package:navigo/Screen/Login/components/rounded_button.dart';
 import 'package:navigo/components/Constant.dart';
-import 'package:navigo/components/form_error.dart';
+import 'package:navigo/components/form_error_dark.dart';
 import 'package:navigo/helper/keyboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,49 +85,57 @@ class _SignFormState extends State<SignForm> {
           _buildPasswordFormField(),
           SizedBox(height: 10),
           Align(
-            child: Text(
-              'Forget Password?',
-              style: TextStyle(color: Colors.white, fontSize: 16.0),
+            child: RichText(
+              text: TextSpan(
+                  text: 'Forgot Password?',
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(context).pushNamed(forgotPassword);
+                    }),
             ),
             alignment: Alignment.topRight,
           ),
           SizedBox(height: 10),
-          FormError(errors: errors),
+          FormErrorDark(errors: errors),
           SizedBox(height: 20),
           RoundedButton(
             text: "Login",
             color: kSecondaryLightColor,
             textColor: Colors.black,
             press: () async {
-              KeyboardUtil.hideKeyboard(context);
-              buildLoading(context);
-              bool _isSignIn = await signIn(_email.trim(), _password.trim());
-              if (_isSignIn) {
-                goDashboard();
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      backgroundColor: textFieldBackgroundColor,
-                      content: Text(
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                KeyboardUtil.hideKeyboard(context);
+                buildLoading(context);
+                bool _isSignIn = await signIn(_email.trim(), _password.trim());
+                if (_isSignIn) {
+                  goDashboard();
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        backgroundColor: textFieldBackgroundColor,
+                        content: Text(
                           'Unauthorised user',
-                        style: TextStyle(
-                            fontSize: 16.0, color: textColor),
-                      ),
-                      actions: [
-                        FlatButton(
-                          child: Text(
+                          style: TextStyle(
+                              fontSize: 16.0, color: textColor),
+                        ),
+                        actions: [
+                          FlatButton(
+                            child: Text(
                               'OK',
-                            style: TextStyle(
-                                fontSize: 14.0, color: kSecondaryLightColor),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context, true);
-                            Navigator.pop(context, true);
-                          },
-                        )
-                      ],
-                    ));
+                              style: TextStyle(
+                                  fontSize: 14.0, color: kSecondaryLightColor),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                              Navigator.pop(context, true);
+                            },
+                          )
+                        ],
+                      ));
+                }
               }
             },
           ),
@@ -149,7 +158,8 @@ class _SignFormState extends State<SignForm> {
           if (value.isNotEmpty) {
             _password = value;
             removeError(error: kPassNullError);
-          } else if (value.length >= 8) {
+          }
+          if (value.length >= 8) {
             removeError(error: kShortPassError);
           }
           return null;
@@ -158,7 +168,8 @@ class _SignFormState extends State<SignForm> {
           if (value.isEmpty) {
             addError(error: kPassNullError);
             return "";
-          } else if (value.length < 8) {
+          }
+          if (value.length < 8) {
             addError(error: kShortPassError);
             return "";
           }
@@ -172,6 +183,7 @@ class _SignFormState extends State<SignForm> {
           labelText: "Password",
           hintText: "Password",
           border: InputBorder.none,
+          errorStyle: TextStyle(height: 0),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           isDense: true,
           // Reduces height a bit
@@ -205,7 +217,8 @@ class _SignFormState extends State<SignForm> {
           _email = value;
           if (value.isNotEmpty) {
             removeError(error: kEmailNullError);
-          } else if (emailValidatorRegExp.hasMatch(value)) {
+          }
+          if (emailValidatorRegExp.hasMatch(value)) {
             removeError(error: kInvalidEmailError);
           }
           return null;
@@ -214,18 +227,19 @@ class _SignFormState extends State<SignForm> {
           if (value.isEmpty) {
             addError(error: kEmailNullError);
             return "";
-          } else if (!emailValidatorRegExp.hasMatch(value)) {
+          }
+          if (!emailValidatorRegExp.hasMatch(value)) {
             addError(error: kInvalidEmailError);
             return "";
           }
           return null;
         },
         keyboardType: TextInputType.emailAddress,
-        obscureText: _obscured,
         decoration: InputDecoration(
           labelText: "Email",
           hintText: "Enter your email",
           border: InputBorder.none,
+          errorStyle: TextStyle(height: 0),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           isDense: true, // Reduces height a bit
         ),
