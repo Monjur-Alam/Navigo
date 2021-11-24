@@ -130,7 +130,7 @@ class _SendEmailScreenState extends State<SendEmailScreen> {
           actions: [
             TextButton(
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState.validate() && _email != null) {
                     _formKey.currentState.save();
                     KeyboardUtil.hideKeyboard(context);
                     sendEmail(
@@ -459,9 +459,7 @@ class _SendEmailScreenState extends State<SendEmailScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => {
-            Navigator.pop(context, true)
-          },
+          onPressed: () => {Navigator.pop(context, true)},
           icon: Icon(Icons.arrow_back),
         ),
         // actions: [
@@ -504,13 +502,12 @@ class _SendEmailScreenState extends State<SendEmailScreen> {
     return StreamBuilder<QuerySnapshot>(
         stream: (_searchToEmail != "" && _searchToEmail != null)
             ? contact
-            .where("name", isNotEqualTo: _searchToEmail)
-            .orderBy("name")
-            .startAt([_searchToEmail]).endAt(
-            [_searchToEmail + '\uf8ff']).snapshots()
+                .where("name", isNotEqualTo: _searchToEmail)
+                .orderBy("name")
+                .startAt([_searchToEmail]).endAt(
+                    [_searchToEmail + '\uf8ff']).snapshots()
             : contact.snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             print('Something went Wrong');
           }
@@ -574,10 +571,10 @@ class _SendEmailScreenState extends State<SendEmailScreen> {
                   ]
                       .map(
                         (e) => Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
-                      child: e,
-                    ),
-                  )
+                          padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                          child: e,
+                        ),
+                      )
                       .toList(),
                 );
               });
